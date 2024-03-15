@@ -1,11 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct {
-    char label[20];
-    int x;
-    int y;
-} Point;
+#include "Point.c"
 
 int main() {
     Point *myPoint = malloc(sizeof(Point));
