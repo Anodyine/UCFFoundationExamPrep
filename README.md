@@ -1,3 +1,8 @@
+# UCF Foundation Exam Prep
+This repo attempts to follow along with the UCF Foundation Exam Structure outline found here:
+
+https://www.cs.ucf.edu/wp-content/uploads/2022/02/FE-ExamOutline.pdf
+
 # Getting Started
 Currently, only Windows quick start instructions are provided.
 
