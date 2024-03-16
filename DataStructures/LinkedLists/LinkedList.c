@@ -11,10 +11,11 @@ typedef struct _Node {
 typedef struct {
     int length;
     char typeName[32];
+    int typeSize;
     Node *head;
 } LinkedList;
 
-LinkedList* new_LinkedList (char *typeName) {
+LinkedList* new_LinkedList (char *typeName, int typeSize) {
     /* Validation */ 
     if (strlen(typeName) > 16) {
         printf("Your type name is greater than 16 bytes. This list does not handle that. Please make your name shorter or request a modification of this structure.\n");
@@ -23,6 +24,7 @@ LinkedList* new_LinkedList (char *typeName) {
 
     LinkedList *newList = malloc(sizeof(LinkedList));
     strcpy(newList->typeName, typeName);
+    newList->typeSize = typeSize;
     newList->length = 0;
     newList->head = NULL;
 
@@ -32,10 +34,8 @@ LinkedList* new_LinkedList (char *typeName) {
 int LinkedList_Add (LinkedList *list, void *data) {
     /* Create Node */
     Node *newNode = malloc(sizeof(Node));
-    if (strcmp(list->typeName, "int") == 0) {
-        newNode->data = malloc(sizeof(int));
-        memcpy(newNode->data, data, sizeof(int));
-    }
+    newNode->data = malloc(list->typeSize);
+    memcpy(newNode->data, data, list->typeSize);
 
     /* Adjust Pointers */
     newNode->next = list->head;
@@ -57,7 +57,7 @@ int main (int) {
     printf("Testing %s\n", currentFunctionName);
 
     currentAction = "creating a list";
-    LinkedList* myList = new_LinkedList("int");
+    LinkedList* myList = new_LinkedList("int", sizeof(int));
     if (myList->head != NULL) {
         errorDescription = "myList->head did not point to NULL";
         printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
@@ -70,6 +70,11 @@ int main (int) {
     }
     if (strcmp(myList->typeName, "int") != 0) {
         errorDescription = "myList->typeName was not saved";
+        printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
+        return 1;
+    }
+    if (myList->typeSize != sizeof(int)) {
+        errorDescription = "myList->typeSize was not saved";
         printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
         return 1;
     }
