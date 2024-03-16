@@ -3,15 +3,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-/*
-    With this generic linked list, the author intends that the user provide a string that represents 
-    the data type of the node. The property "typeName", is provided for that purpose, but no validation is done 
-    ensure the data type matches any particular known type.  To access the data, the user 
-    of this structure may need to typecast the void pointer, called data, to a 
-    particular pointer type based on the string stored in typeName.  (I. e, the user can use the "typeName" of the node to determine 
-    which pointer type to typecast to.)
-*/
-
 typedef struct _Node {
     void *data;
     struct _Node *next;
