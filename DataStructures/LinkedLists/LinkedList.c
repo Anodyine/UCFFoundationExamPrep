@@ -13,39 +13,44 @@
 */
 
 typedef struct _Node {
-    char typeName[16];
     void *data;
     struct _Node *next;
 } Node;
 
 typedef struct {
     int length;
+    char typeName[32];
     Node *head;
 } LinkedList;
 
-LinkedList* new_LinkedList () {
+LinkedList* new_LinkedList (char *typeName) {
+    /* Validation */ 
+    if (strlen(typeName) > 16) {
+        printf("Your type name is greater than 16 bytes. This list does not handle that. Please make your name shorter or request a modification of this structure.\n");
+        return NULL;
+    }
+
     LinkedList *newList = malloc(sizeof(LinkedList));
+    strcpy(newList->typeName, typeName);
     newList->length = 0;
     newList->head = NULL;
 
     return newList;
 }
 
-int LinkedList_Add (LinkedList *list, char *typeName, void *data) {
-    /* Validation */ 
-    if (strlen(typeName) > 16) {
-        printf("Your type name is greater than 16 bytes. This list does not handle that. Please make your name shorter or request a modification of this structure.\n");
-        return 1;
-    }
-
+int LinkedList_Add (LinkedList *list, void *data) {
     /* Create Node */
     Node *newNode = malloc(sizeof(Node));
-    strcpy(newNode->typeName, typeName);
-    newNode->data = data;
+    if (strcmp(list->typeName, "int") == 0) {
+        newNode->data = malloc(sizeof(int));
+        memcpy(newNode->data, data, sizeof(int));
+    }
 
     /* Adjust Pointers */
     newNode->next = list->head;
     list->head = newNode;
+
+    /* Increase Length */
     list->length += 1;
 
     return 0;
@@ -61,7 +66,7 @@ int main (int) {
     printf("Testing %s\n", currentFunctionName);
 
     currentAction = "creating a list";
-    LinkedList* myList = new_LinkedList();
+    LinkedList* myList = new_LinkedList("int");
     if (myList->head != NULL) {
         errorDescription = "myList->head did not point to NULL";
         printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
@@ -69,6 +74,11 @@ int main (int) {
     }
     if (myList->length != 0) {
         errorDescription = "myList->length was not 0";
+        printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
+        return 1;
+    }
+    if (strcmp(myList->typeName, "int") != 0) {
+        errorDescription = "myList->typeName was not saved";
         printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
         return 1;
     }
@@ -80,24 +90,18 @@ int main (int) {
     currentAction = "adding a single int item";
     int *data = malloc(sizeof(int));
     *data = 9;
-    LinkedList_Add(myList, "int", data);
+    LinkedList_Add(myList, data);
     if (myList->head == NULL) {
         errorDescription = "myList->head points to NULL";
         printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
         return 1;
     }
-
-    if (myList->head->data != data) {
-        errorDescription = "myList->head->data does not point to the pointer that was passed in.";
+    if (*(int *)myList->head->data != 9) {
+        errorDescription = "the value of passed into add was not saved to the head element.";
         printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
         return 1;
     }
-
-    if (*(int*)myList->head->data != 9) {
-        errorDescription = "cannot access original value that was stored";
-        printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
-        return 1;
-    };
+    free(data);
 
 
     printf("LinkedList Tests Passed.\n");
