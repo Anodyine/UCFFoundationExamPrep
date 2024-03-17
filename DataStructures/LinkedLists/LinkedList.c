@@ -1,21 +1,4 @@
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-
-typedef struct _Node {
-    void* data;
-    struct _Node* next;
-    struct _Node* previous;
-} Node;
-
-typedef struct {
-    int length;
-    char typeName[32];
-    int typeSize;
-    Node* head;
-    Node* tail;
-} LinkedList;
+#include "LinkedList.h"
 
 /*
     This generic linked list stores a list of void pointers. To access the data, is required to type cast the return value of LinkedList_GetByIndex to 

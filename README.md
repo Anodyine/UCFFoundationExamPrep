@@ -60,3 +60,18 @@ int main() {
 30. Scroll down the Run Code configuration and click on it
 31. Scroll down until you see Run in Terminal and click on that box to check it
 32. Run the code as you did earlier in step 25 and see that it runs in the terminal
+
+## Running Tests
+
+1. In the terminal, navigate to the folder with the files you want to test. For example, enter "cd DataStructures/LinkedLists" without the quotes.
+2. Run the command "gcc -o myName ./*.c && ./myName" 
+
+The output of the tests should display in the console and file called "myName.exe" will be created in the current folder.
+
+## Debugging Tests 
+
+Debugging tests should be possible by opening the file you wish to run and clicking on the run and debug (shaped like a play button and a bug in the bottom right corner.)
+The breakpoints that you set in the current file and all files in the same directory can be hit.
+
+The configuration of the debugger is provided in ./vscode/tasks.json. Line 10 of that file causes all C files in the same directory as the currently opened file to be included
+in the debugging. 

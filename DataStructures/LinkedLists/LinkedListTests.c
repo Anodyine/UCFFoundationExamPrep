@@ -1,4 +1,4 @@
-#include "LinkedList.c"
+#include "LinkedList.h"
 #include "../DynamicMemoryManagement/Point.c"
 
 int testLinkedListWithInts();
