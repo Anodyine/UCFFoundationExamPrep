@@ -69,12 +69,24 @@ You can learn some from setting it up, reading it, and running it, but strugglin
 
 -Richard Feynman
 
-## Running Tests
+## Running Tests With Terminal
 
 1. In the terminal, navigate to the folder with the files you want to test. For example, enter "cd DataStructures/LinkedLists" without the quotes.
 2. Run the command "gcc -o myName ./*.c && ./myName" 
 
 The output of the tests should display in the console and file called "myName.exe" will be created in the current folder.
+
+## Running Tests With Code Runner Extension
+
+You can open a test file and click the play button in the upper right corner. The settings found in .vscode/settings.json on line 3 will cause Code Runner to compile all C files 
+in the same directory as the current file and run the resulting program. A command similar to this is found there:
+
+~~~
+    cd $dir && gcc ./*.c -o $fileNameWithoutExt && $dir$fileNameWithoutExt
+~~~
+
+This setup means that if two files with .c both have a main function, it will fail to run. When using
+files across multiple directories, compiling and building manually is recommended.
 
 ## Debugging Tests 
 

@@ -1,4 +1,7 @@
 {
+    "code-runner.executorMap": {
+        "c": "cd $dir && gcc ./*.c -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+    },
     "files.associations": {
         "stdlib.h": "c",
         "string.h": "c",
