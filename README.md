@@ -7,7 +7,7 @@ https://www.cs.ucf.edu/wp-content/uploads/2022/02/FE-ExamOutline.pdf
 Currently, only Windows quick start instructions are provided.
 
 ## Windows
-To get started easily with Windows and Visual Studio Code follow the following steps:
+To get started easily with C on Windows with Visual Studio Code follow the following steps:
 
 ### Installing Terminal and Compiler
 1. Download and install MSYS2 from here: https://www.msys2.org/
@@ -60,6 +60,13 @@ int main() {
 30. Scroll down the Run Code configuration and click on it
 31. Scroll down until you see Run in Terminal and click on that box to check it
 32. Run the code as you did earlier in step 25 and see that it runs in the terminal
+
+You should now have enough set up so that you can clone this repo, then run or debug the code here with Visual Studio Code. 
+However, if you're a fellow student I strongly recommend that you write it all yourself and just reference these examples when you get stuck.
+You can learn some from setting it up, reading it, and running it, but struggling to write it yourself is very valuable for your growth.
+
+“What I cannot create, I do not understand.”
+-Richard Feynman
 
 ## Running Tests
 
