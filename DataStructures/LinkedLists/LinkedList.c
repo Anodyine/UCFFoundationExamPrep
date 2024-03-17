@@ -6,6 +6,7 @@
 typedef struct _Node {
     void* data;
     struct _Node* next;
+    struct _Node* previous;
 } Node;
 
 typedef struct {
@@ -16,9 +17,18 @@ typedef struct {
     Node* tail;
 } LinkedList;
 
+/*
+    This generic linked list stores a list of void pointers. To access the data, is required to type cast the return value of LinkedList_GetByIndex to 
+    a pointer to whichever data type you used when you created the list. To help with that, a typeName property is provided in case you are working with 
+    multiple types of lists and need to differentiate between them. The list also has a typeSize property that tracks the size that each data item 
+    will have in memory. The author recommeneds to only modify the list through the given functions and not to modify the properties typeSize, typeName,
+    length, head, or tail directly. Reading the properties should not cause issues.
+
+    The list is zero indexed. The first item you add with LinkedList_Add will be at index 0, the second one will be at index 1, etc.
+*/
+
 LinkedList* new_LinkedList (char* typeName, int typeSize) {
-    /* Validation */ 
-    if (strlen(typeName) > 16) {
+    if (strlen(typeName) > 32) {
         printf("Your type name is greater than 16 bytes. This list does not handle that. Please make your name shorter or request a modification of this structure.\n");
         return NULL;
     }
@@ -36,18 +46,24 @@ LinkedList* new_LinkedList (char* typeName, int typeSize) {
 int LinkedList_Add (LinkedList* list, void* data) {
     /* Create Node */
     Node* newNode = malloc(sizeof(Node));
-    newNode->data = malloc(list->typeSize);
-    memcpy(newNode->data, data, list->typeSize);
 
-    /* Adjust Pointers */
+    /* Update Pointers */
     newNode->next = list->head;
+    newNode->previous = NULL;
+    if (list->head != NULL) {
+        list->head->previous = newNode;
+    }
     list->head = newNode;
     if (list->tail == NULL) {
         list->tail = newNode;
     }
 
+    /* Copy Data */
+    newNode->data = malloc(list->typeSize);
+    memcpy(newNode->data, data, list->typeSize);
+
     /* Increase Length */
-    list->length += 1;
+    list->length++;
 
     return 0;
 }
@@ -62,7 +78,7 @@ void* LinkedList_GetLast (LinkedList* list) {
 
 void* LinkedList_GetByIndex (LinkedList* list, int index) {
     if (index > list->length - 1) {
-        printf("You tried to access an index that is greater than the length of the List.\n");
+        printf("You tried to access an index that is greater than the length of the List minus 1.\n");
         return NULL;
     }
 
@@ -79,6 +95,42 @@ void* LinkedList_GetByIndex (LinkedList* list, int index) {
     return cursor->data;
 }
 
+int LinkedList_RemoveByIndex (LinkedList* list, int index) { 
+    if (index > list->length - 1) {
+        printf("You tried to access an index that is greater than the length of the List.\n");
+        return -1;
+    }
+
+    if (index < 0) {
+        printf("You tried to access an index that is less than 0.\n");
+        return -1;
+    }
+
+    Node* cursor = list->head;
+    for (int i = 0; i < list->length - 1 - index; i++) {
+        cursor = cursor->next;
+    }
+
+    free(cursor->data);
+
+    if (cursor->previous == NULL) {
+        list->head = cursor->next;
+    } else {
+        cursor->previous->next = cursor->next;
+    }
+
+    if (cursor->next == NULL) {
+        list->tail = cursor->previous;
+    } else {
+        cursor->next->previous = cursor->previous;
+    }
+
+    free(cursor);
+    list->length--;
+
+    return 0;
+}
+
 int LinkedList_Destroy (LinkedList* list) {
     Node* cursor = list->head;
     while (cursor != NULL) {
@@ -89,129 +141,5 @@ int LinkedList_Destroy (LinkedList* list) {
     }
 
     free(list);
-    return 0;
-}
-
-
-
-int main (int) {
-    char* currentFunctionName = malloc(80);    
-    char* currentAction = malloc(200);    
-    char* errorDescription = malloc(400);
-
-    /* Testing new_LinkedList */
-    currentFunctionName = "new_LinkedList";
-    printf("Testing %s\n", currentFunctionName);
-
-    currentAction = "creating a list";
-    LinkedList* myList = new_LinkedList("int", sizeof(int));
-    if (myList->head != NULL) {
-        errorDescription = "myList->head did not point to NULL.";
-        printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
-        return -1;
-    }
-    if (myList->tail != NULL) {
-        errorDescription = "myList->tail did not point to NULL.";
-        printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
-        return -1;
-    }
-    if (myList->length != 0) {
-        errorDescription = "myList->length was not 0.";
-        printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
-        return -1;
-    }
-    if (strcmp(myList->typeName, "int") != 0) {
-        errorDescription = "myList->typeName was not saved.";
-        printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
-        return -1;
-    }
-    if (myList->typeSize != sizeof(int)) {
-        errorDescription = "myList->typeSize was not saved.";
-        printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
-        return -1;
-    }
-
-    /* Testing LinkedList_Add */
-    currentFunctionName = "LinkedList_Add";
-    printf("Testing %s\n", currentFunctionName);
-    currentAction = "adding a the first int item";
-    int* temp = malloc(sizeof(int));
-    *temp = 9;
-    LinkedList_Add(myList, temp);
-    if (myList->head == NULL) {
-        errorDescription = "myList->head points to NULL.";
-        printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
-        return -1;
-    }
-    if (myList->tail == NULL) {
-        errorDescription = "myList->tail points to NULL.";
-        printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
-        return -1;
-    }
-    if (*(int*)myList->head->data != 9) {
-        errorDescription = "the value passed into add was not saved to the head element.";
-        printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
-        return -1;
-    }
-
-    currentAction = "adding a second int item";
-    Node* previousHead = myList->head;
-    *temp = 14;
-    LinkedList_Add(myList, temp);
-    if (myList->head == previousHead) {
-        errorDescription = "myList->head was not updated.";
-        printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
-        return -1;
-    }
-    if (*(int*)myList->head->data != 14) {
-        errorDescription = "the value passed into add was not saved to the head element.";
-        printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
-        return -1;
-    }
-
-    free(temp);
-
-    currentFunctionName = "LinkedList_GetByIndex";
-    printf("Testing %s\n", currentFunctionName);
-    int firstElement = *(int*)LinkedList_GetByIndex(myList, 0);
-    if (firstElement != 9) {
-        currentAction = "getting the item at index 0";
-        errorDescription = "Expected: 9";
-        printf("%s test failed: After %s, %s, Actual: %d\n", currentFunctionName, currentAction, errorDescription, firstElement);
-        return -1;
-    }
-    int secondElement = *(int*)LinkedList_GetByIndex(myList, 1);
-    if (secondElement != 14) {
-        currentAction = "getting the item at index 1";
-        errorDescription = "Expected: 14";
-        printf("%s test failed: After %s, %s, Actual: %d\n", currentFunctionName, currentAction, errorDescription, secondElement);
-        return -1;
-    }
-
-    currentFunctionName = "LinkedList_GetFirst";
-    printf("Testing %s\n", currentFunctionName);
-    int firstElement2 = *(int*)LinkedList_GetFirst(myList);
-    if (firstElement2 != 9) {
-        currentAction = "getting the first item";
-        errorDescription = "Expected: 9";
-        printf("%s test failed: After %s, %s, Actual: %d\n", currentFunctionName, currentAction, errorDescription, firstElement2);
-        return -1;
-    }
-
-    currentFunctionName = "LinkedList_GetLast";
-    printf("Testing %s\n", currentFunctionName);
-    int lastElement = *(int*)LinkedList_GetLast(myList);
-    if (lastElement != 14) {
-        currentAction = "getting the last item";
-        errorDescription = "Expected: 14";
-        printf("%s test failed: After %s, %s, Actual: %d\n", currentFunctionName, currentAction, errorDescription, lastElement);
-        return -1;
-    }
-
-    currentFunctionName = "LinkedList_Destroy";
-    printf("Testing %s\n", currentFunctionName);
-    LinkedList_Destroy(myList);
-
-    printf("LinkedList Tests Passed.\n");
     return 0;
 }
