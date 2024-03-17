@@ -17,7 +17,7 @@
  */
 /* 
 int main(int) {
-   printf("i cause bugs");
+   printf("i cause run and debug to not work =if following setup in README.");
 }
 */
 

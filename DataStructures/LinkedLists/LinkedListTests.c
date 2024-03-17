@@ -1,5 +1,5 @@
 #include "LinkedList.h"
-#include "../DynamicMemoryManagement/Point.c"
+#include "../../Shared/Point.h"
 
 int testLinkedListWithInts();
 int testLinkedListWithPointStructs();
