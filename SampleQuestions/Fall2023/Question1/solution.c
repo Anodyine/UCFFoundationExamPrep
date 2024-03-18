@@ -17,13 +17,16 @@ typedef struct Monster_List {
 void initializeMonster(Monster* mPtr);
 
 Monster_List* getDefaultMonsters(int n) {
+    // Allocated one monster pointer per monster
     Monster** monsters = (Monster**)malloc(sizeof(Monster*)*n);
 
     for (int i = 0; i < n; i++) {
+        // Allocated one monster per monster
         monsters[i] = (Monster*)malloc(sizeof(Monster));
         initializeMonster(monsters[i]);
     }
 
+    // Allocated one list    
     Monster_List* result = (Monster_List*)malloc(sizeof(Monster_List));
     result->mArray = monsters;
     result->numMonsters = n;
@@ -45,4 +48,7 @@ int main (int) {
     for (int i = 0; i < 10; i++) {
         free(myMonsters->mArray[i]);
     }
+
+    free(myMonsters->mArray);
+    free(myMonsters);
 }
