@@ -2,9 +2,16 @@
 #include <stdlib.h>
 
 int** triangularSum (int* base, int n) {
+    // Allocated memory for a pointer to each array
     int** result = malloc(n * sizeof(int*));
-    result[0] = base;
+    // Allocated memory for each element in the base array
+    result[0] = malloc(n * sizeof(int));
+    for (int i=0; i < n; i++) {
+        result[0][i] = base[i];
+    }
+
     for (int i = 1; i < n; i++) {
+        // Allocated memory for each element in one of the smaller arrays
         result[i] = malloc((n - i) * sizeof(int));
         for (int j = 0; j < n - i; j++) {
             result[i][j] = result[i - 1][j] + result[i - 1][j + 1];
