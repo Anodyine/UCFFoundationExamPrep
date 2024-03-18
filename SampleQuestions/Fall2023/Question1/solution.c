@@ -17,7 +17,7 @@ typedef struct Monster_List {
 void initializeMonster(Monster* mPtr);
 
 Monster_List* getDefaultMonsters(int n) {
-    Monster** monsters = (Monster**)malloc(sizeof(Monster*));
+    Monster** monsters = (Monster**)malloc(sizeof(Monster*)*n);
 
     for (int i = 0; i < n; i++) {
         monsters[i] = (Monster*)malloc(sizeof(Monster));
