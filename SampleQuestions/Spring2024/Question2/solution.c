@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../../../DataStructures/LinkedLists/LinkedList.h"
+#include "../../../DataStructures/LinkedLists/LinkedList.c"
 
 // typedef struct node_s {
 //     int data;
