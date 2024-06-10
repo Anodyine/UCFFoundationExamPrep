@@ -11,11 +11,11 @@ To get started easily with C on Windows with Visual Studio Code follow the follo
 
 ### Installing Terminal and Compiler
 1. Download and install MSYS2 from here: https://www.msys2.org/
-2. Run MSYS2 Terminal
+2. Run MSYS2 MINGW64 Terminal
 3. Run: "pacman -Syu" and type Y when prompted
 4. Run: "pacman -S mingw-w64-x86_64-gcc" and type Y when prompted to install the compiler
 5. Run: "gcc --version" to confirm that the compiler is installed
-4. Run: "pacman -S mingw-w64-x86_64-gcc" and type Y when prompted to install the debugger
+4. Run: "pacman -S mingw-w64-x86_64-gdb" and type Y when prompted to install the debugger
 5. Open the Windows menu and type "Environment" then choose Edit the System and Environment Variables
 6. Click on Environment Variables
 7. Under System Variables, click on Path
@@ -57,9 +57,10 @@ int main() {
 
 ### Set Up Run in Terminal (So we can receive user input)
 29. Click on File -> Preferences -> Settings
-30. Scroll down the Run Code configuration and click on it
-31. Scroll down until you see Run in Terminal and click on that box to check it
-32. Run the code as you did earlier in step 25 and see that it runs in the terminal
+30. In the left pane, expand the extensions section
+31. Scroll down the Run Code configuration and click on it
+32. Scroll down until you see Run in Terminal and click on that box to check it
+33. Run the code as you did earlier in step 25 and see that it runs in the terminal
 
 You should now have enough set up so that you can clone this repo, then run or debug the code here with Visual Studio Code. 
 However, if you're a fellow student I strongly recommend that you write it all yourself and just reference these examples when you get stuck.
