@@ -1,11 +1,11 @@
 #include "../DataStructures/LinkedLists/LinkedList.h"
 #include "../Shared/Point.h"
 
-int testLinkedListWithInts();
+int testLinkedStackWithInts();
 int testLinkedListWithPointStructs();
 
 int main (int) {
-    if (testLinkedListWithInts() == -1) {
+    if (testLinkedStackWithInts() == -1) {
         return -1;
     }
 
@@ -17,7 +17,7 @@ int main (int) {
     return 0;
 }
 
-int testLinkedListWithInts() {
+int testLinkedStackWithInts() {
     char* currentFunctionName = malloc(80);    
     char* currentAction = malloc(200);    
     char* errorDescription = malloc(400);

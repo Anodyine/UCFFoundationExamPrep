@@ -1,11 +1,13 @@
 {
     "code-runner.executorMap": {
-        "c": "cd $dir && gcc $workspaceRoot\\DataStructures\\LinkedLists\\LinkedList.c $workspaceRoot\\DataStructures\\Stacks\\GenericStack.c $fileNameWithoutExt.c -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "c": "cd $dir && gcc $workspaceRoot\\DataStructures\\SharedDataStructures.c $fileNameWithoutExt.c -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
     },
     "files.associations": {
         "stdlib.h": "c",
         "string.h": "c",
         "linkedlist.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "point.h": "c",
+        "linkedstack.h": "c"
     }
 }

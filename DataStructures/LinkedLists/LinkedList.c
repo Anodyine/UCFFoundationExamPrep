@@ -11,8 +11,8 @@
 */
 
 LinkedList* new_LinkedList (char* typeName, int typeSize) {
-    if (strlen(typeName) > 32) {
-        printf("Your type name is greater than 16 bytes. This list does not handle that. Please make your name shorter or request a modification of this structure.\n");
+    if (strlen(typeName) > 100) {
+        printf("Your type name is greater than 100 bytes. This list does not handle that. Please make your name shorter or request a modification of this structure.\n");
         return NULL;
     }
 

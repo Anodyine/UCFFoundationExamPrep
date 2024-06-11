@@ -13,7 +13,7 @@ typedef struct _Node {
 
 typedef struct {
     int length;
-    char typeName[32];
+    char typeName[100];
     int typeSize;
     Node* head;
     Node* tail;
