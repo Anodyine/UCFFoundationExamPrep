@@ -22,6 +22,6 @@ void LinkedStack_Push (LinkedStack* stack, void* data);
 void LinkedStack_RemoveTop (LinkedStack* stack);
 void* LinkedStack_Peek (LinkedStack* stack);
 bool LinkedStack_IsEmpty (LinkedStack* stack);
-int LinkedStack_Destroy (LinkedStack* stack);
+void LinkedStack_Destroy (LinkedStack* stack);
 
 #endif

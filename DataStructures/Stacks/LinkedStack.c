@@ -70,3 +70,16 @@ void LinkedStack_RemoveTop (LinkedStack* stack) {
 
     return;
 }
+
+void LinkedStack_Destroy (LinkedStack* stack) {
+    StackNode* cursor = stack->head;
+    while (cursor != NULL) {
+        free(cursor->data);
+        StackNode* temp = cursor;
+        cursor = cursor->next;
+        free(temp);
+    }
+
+    free(stack);
+    return;
+}

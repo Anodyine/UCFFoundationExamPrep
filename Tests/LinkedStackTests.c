@@ -32,7 +32,16 @@ int testLinkedStackWithInts() {
         printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
         return -1;
     }
-    
+   
+    currentFunctionName = "LinkedStack_IsEmpty";
+    printf("Testing %s\n", currentFunctionName);
+    currentAction = "calling is empty";
+    if (LinkedStack_IsEmpty(myStack) == false) {
+        errorDescription = "IsEmpty returned true after creation";
+        printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
+        return -1;
+    }
+ 
     currentFunctionName = "LinkedStack_Push";
     printf("Testing %s\n", currentFunctionName);
     currentAction = "pushing the first int item";
@@ -64,6 +73,35 @@ int testLinkedStackWithInts() {
         printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
         return -1;
     }
+  
+    currentFunctionName = "LinkedStack_IsEmpty";
+    printf("Testing %s\n", currentFunctionName);
+    currentAction = "calling is empty";
+    if (LinkedStack_IsEmpty(myStack) == true) {
+        errorDescription = "IsEmpty returned false after creating an item";
+        printf("%s test failed: After %s, %s\n", currentFunctionName, currentAction, errorDescription);
+        return -1;
+    }
+
+    currentFunctionName = "LinkedStack_Peek";
+    printf("Testing %s\n", currentFunctionName);
+    int firstElement = *(int*)LinkedStack_Peek(myStack);
+    if (firstElement != 14) {
+        currentAction = "getting the item on the top";
+        errorDescription = "Expected: 14";
+        printf("%s test failed: After %s, %s, Actual: %d\n", currentFunctionName, currentAction, errorDescription, firstElement);
+        return -1;
+    }
+    LinkedStack_RemoveTop(myStack);
+    int secondElement = *(int*)LinkedStack_Peek(myStack);
+    if (secondElement != 9) {
+        currentAction = "getting the item on the top after removing one";
+        errorDescription = "Expected: 9";
+        printf("%s test failed: After %s, %s, Actual: %d\n", currentFunctionName, currentAction, errorDescription, secondElement);
+        return -1;
+    }
+
+    LinkedStack_Destroy(myStack);
 
     return 0;
 }
