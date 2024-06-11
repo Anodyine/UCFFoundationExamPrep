@@ -79,7 +79,7 @@ The output of the tests should display in the console and file called "myName.ex
 
 ## Running Tests With Code Runner Extension
 
-You can open a test file and click the play button in the upper right corner. The settings found in .vscode/settings.json on line 3 will cause Code Runner to compile all C files 
+You can open a test file and click the play button in the upper right corner. The settings found in .vscode/settings.json on line 3 will cause Code Runner to compile all C files inside
 in the same directory as the current file and run the resulting program. A command similar to this is found there:
 
 ~~~

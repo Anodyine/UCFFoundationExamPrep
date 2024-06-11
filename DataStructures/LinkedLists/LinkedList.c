@@ -10,17 +10,6 @@
     The list is zero indexed. The first item you add with LinkedList_Add will be at index 0, the second one will be at index 1, etc.
 */
 
-
-/* 
-    Because of how the build system is set up, uncommenting the code below will cause running to fail, because there would be more than one main function.
-    There is another main function in LinkedListTest.c.
- */
-/* 
-int main(int) {
-   printf("i cause run and debug to not work =if following setup in README.");
-}
-*/
-
 LinkedList* new_LinkedList (char* typeName, int typeSize) {
     if (strlen(typeName) > 32) {
         printf("Your type name is greater than 16 bytes. This list does not handle that. Please make your name shorter or request a modification of this structure.\n");
