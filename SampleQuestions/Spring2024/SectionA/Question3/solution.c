@@ -5,13 +5,15 @@
 
 bool isOperand (char a);
 bool isOperator (char a);
+bool isOpeningParenthesis (char a);
+bool isClosingParenthesis (char a);
 int getPriorityOfOperator (char a);
 char* convertInfixToPostfix (char* infixExpression);
 
 int main (int) {
     char result[100];
 
-    strcpy(result, convertInfixToPostfix ("1^7+2^2*3^2/7"));
+    strcpy(result, convertInfixToPostfix ("3 + 1-7*(4/2+5)*8-7/(5-3+(5+7)/(3*2))"));
 
     printf("The result is: %s\n", result);
 }
@@ -41,7 +43,9 @@ char* convertInfixToPostfix (char* infixExpression) {
             } else {
                 //pop operators until the current operator is higher than the priority of the operator at the top of the stack
                 char operatorToCompare = *(char*)LinkedStack_Peek(stack);
-                while (getPriorityOfOperator (currentCharacter) <= getPriorityOfOperator (operatorToCompare) ) {
+                while (!isOpeningParenthesis(operatorToCompare) 
+                    && getPriorityOfOperator (currentCharacter) <= getPriorityOfOperator (operatorToCompare))
+                {
                     LinkedStack_RemoveTop(stack);
                     //popped operators are appended to the post fix expression
                     *(postFixExpression + strlen(postFixExpression)) = operatorToCompare;
@@ -54,6 +58,28 @@ char* convertInfixToPostfix (char* infixExpression) {
                 //then push the current character to the stack
                 LinkedStack_Push(stack, (infixExpression + i));
             }
+        }
+
+        if (isOpeningParenthesis(*(infixExpression + i))) {
+            LinkedStack_Push(stack, (infixExpression + i));
+        }
+
+        if (isClosingParenthesis(*(infixExpression + i))) {
+            //pop operators until we encounter an opening parenthesis
+            char operatorToCompare = *(char*)LinkedStack_Peek(stack);
+            while (!isOpeningParenthesis(operatorToCompare)) {
+                LinkedStack_RemoveTop(stack);
+                if (LinkedStack_IsEmpty(stack)) {
+                    printf("Error: closing parenthesis was found without matching opening parenthesis");
+                    break;
+                }
+                //popped operators are appended to the post fix expression
+                *(postFixExpression + strlen(postFixExpression)) = operatorToCompare;
+                operatorToCompare = *(char*)LinkedStack_Peek(stack);
+            }
+
+            //then remove the opening parenthesis from the stack
+            LinkedStack_RemoveTop(stack);
         }
     }
 
@@ -77,6 +103,14 @@ bool isOperator (char a) {
         || a == '^';
 }
 
+bool isOpeningParenthesis (char a) {
+    return a == '(';
+}
+
+bool isClosingParenthesis (char a) {
+    return a == ')';
+}
+
 int getPriorityOfOperator (char a) {
     switch (a) {
         case '^':
@@ -92,7 +126,7 @@ int getPriorityOfOperator (char a) {
             return 1;
             break;
         default:
-            printf("Error: character passed to getPriorityOfOperator was not a known operator.");
+            printf("Error: character '%c' was passed to getPriorityOfOperator is not a known operator.", a);
             break;
     }
     return -1;
