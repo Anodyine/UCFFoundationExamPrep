@@ -1,7 +1,7 @@
 /* Answer: head -> 2 -> 5 -> 8 -> 1 -> 7 */
 #include <stdio.h>
 #include <stdlib.h>
-#include "../../../../DataStructures/LinkedLists/LinkedList.h"
+#include "../../../../DataStructures/LinkedLists/DoublyLinkedList.h"
 
 // typedef struct node_s {
 //     int data;
@@ -24,9 +24,9 @@
 //     }
 // }
 
-void whatDoYouDo2(Node* head) {
-    Node * temp = head;
-    Node * temp2 = head->next;
+void whatDoYouDo2(DoublyLinkedNode* head) {
+    DoublyLinkedNode * temp = head;
+    DoublyLinkedNode * temp2 = head->next;
     int a;
     while (temp->next != NULL) {
         a = *(int*)temp->data;
@@ -41,7 +41,7 @@ void whatDoYouDo2(Node* head) {
 }
 
 int main (int) {
-    LinkedList* myList = new_LinkedList("int", sizeof(int));
+    DoublyLinkedList* myList = new_LinkedList("int", sizeof(int));
 
     int* temp = malloc(sizeof(int));
     *temp = 7;
