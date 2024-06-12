@@ -29,6 +29,7 @@ char* convertInfixToPostfix (char* infixExpression) {
         *(postFixExpression + i) = '\0';
     }
 
+    // create the stack
     LinkedStack* stack = new_LinkedStack("char", sizeof(char));
 
     for (int i = 0; i < strlen(infixExpression); i++) {
