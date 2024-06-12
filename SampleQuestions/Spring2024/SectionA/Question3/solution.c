@@ -11,11 +11,13 @@ int getPriorityOfOperator (char a);
 char* convertInfixToPostfix (char* infixExpression);
 
 int main (int) {
-    char result[100];
+    char* result;
 
-    strcpy(result, convertInfixToPostfix ("3 + 1-7*(4/2+5)*8-7/(5-3+(5+7)/(3*2))"));
+    result = convertInfixToPostfix ("3 + 1-7*(4/2+5)*8-7/(5-3+(5+7)/(3*2))");
 
     printf("The result is: %s\n", result);
+
+    free(result);
 }
 
 char* convertInfixToPostfix (char* infixExpression) {
