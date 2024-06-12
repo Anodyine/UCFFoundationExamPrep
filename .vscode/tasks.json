@@ -7,7 +7,8 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${fileDirname}\\*.c",
+                "${workspaceRoot}\\DataStructures\\SharedDataStructures.c",
+                "${fileBasenameNoExtension}.c",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
