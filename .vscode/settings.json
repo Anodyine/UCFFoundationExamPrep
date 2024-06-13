@@ -9,6 +9,8 @@
         "stdio.h": "c",
         "point.h": "c",
         "linkedstack.h": "c",
-        "binarytree.h": "c"
+        "binarytree.h": "c",
+        "linkedqueue.h": "c",
+        "arraystack.h": "c"
     }
 }

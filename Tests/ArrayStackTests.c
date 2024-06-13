@@ -2,19 +2,19 @@
 
 // Main function to demonstrate stack operations
 int main() {
-    struct stack myStack;
-    InitStack(&myStack);
+    struct ArrayStack myStack;
+    ArrayStack_init(&myStack);
 
-    push(&myStack, 10);
-    push(&myStack, 20);
-    push(&myStack, 30);
+    ArrayStack_Push(&myStack, 10);
+    ArrayStack_Push(&myStack, 20);
+    ArrayStack_Push(&myStack, 30);
 
-    printf("Top element is %d\n", peek(&myStack));
+    printf("Top element is %d\n", ArrayStack_Peek(&myStack));
 
-    printf("Popped %d from the stack\n", pop(&myStack));
-    printf("Popped %d from the stack\n", pop(&myStack));
-    printf("Popped %d from the stack\n", pop(&myStack));
-    printf("Popped %d from the stack\n", pop(&myStack)); // Attempt to pop from an empty stack
+    printf("Popped %d from the stack\n", ArrayStack_Pop(&myStack));
+    printf("Popped %d from the stack\n", ArrayStack_Pop(&myStack));
+    printf("Popped %d from the stack\n", ArrayStack_Pop(&myStack));
+    printf("Popped %d from the stack\n", ArrayStack_Pop(&myStack)); // Attempt to pop from an empty stack
 
     return 0;
 }

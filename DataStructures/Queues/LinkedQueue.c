@@ -1,22 +1,22 @@
 #include "LinkedQueue.h"
 
 // Function to initialize the queue
-void InitQueue(struct queue *q)
+void LinkedQueue_Init(struct LinkedQueue *q)
 {
     q->front = NULL; // Initialize front to NULL
     q->back = NULL;  // Initialize back to NULL
 }
 
 // Function to check if the queue is empty
-int empty(struct queue *q)
+int LinkedQueue_IsEmpty(struct LinkedQueue *q)
 {
     return q->front == NULL;
 }
 
 // Function to add an element to the queue
-void enqueue(struct queue *q, int val)
+void LinkedQueue_Enqueue(struct LinkedQueue *q, int val)
 {
-    struct node *newNode = (struct node *)malloc(sizeof(struct node)); // Allocate memory for a new node
+    struct QueueNode *newNode = (struct QueueNode *)malloc(sizeof(struct QueueNode)); // Allocate memory for a new node
     newNode->data = val;                                               // Set the data of the new node
     newNode->next = NULL;                                              // Set the next pointer of the new node to NULL
     if (q->back == NULL)
@@ -33,14 +33,14 @@ void enqueue(struct queue *q, int val)
 }
 
 // Function to remove an element from the queue
-int dequeue(struct queue *q)
+int LinkedQueue_Dequeue(struct LinkedQueue *q)
 {
-    if (empty(q))
+    if (LinkedQueue_IsEmpty(q))
     { // If the queue is empty
         printf("Queue is empty. Cannot dequeue\n");
         return -1; // Return an error value
     }
-    struct node *temp = q->front; // Store a temporary pointer to the front node
+    struct QueueNode *temp = q->front; // Store a temporary pointer to the front node
     int val = temp->data;         // Get the data from the front node
     q->front = q->front->next;    // Move the front pointer to the next node
     if (q->front == NULL)
@@ -52,9 +52,9 @@ int dequeue(struct queue *q)
 }
 
 // Function to get the front element of the queue without removing it
-int front(struct queue *q)
+int LinkedQueue_Front(struct LinkedQueue *q)
 {
-    if (empty(q))
+    if (LinkedQueue_IsEmpty(q))
     { // If the queue is empty
         printf("Queue is empty. Cannot peek\n");
         return -1; // Return an error value
