@@ -1,4 +1,4 @@
-#include "Stacks.h"
+#include "ArrayStack.h"
 
 // Function to initialize the stack
 void InitStack(struct stack* s) {

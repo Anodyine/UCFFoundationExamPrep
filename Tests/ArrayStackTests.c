@@ -1,4 +1,4 @@
-#include "../DataStructures/Stacks/Stacks.h"
+#include "../DataStructures/Stacks/ArrayStack.h"
 
 // Main function to demonstrate stack operations
 int main() {
