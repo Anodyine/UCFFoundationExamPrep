@@ -3,7 +3,7 @@
 // Main function to demonstrate stack operations
 int main() {
     struct stack myStack;
-    init(&myStack);
+    InitStack(&myStack);
 
     push(&myStack, 10);
     push(&myStack, 20);

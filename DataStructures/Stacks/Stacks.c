@@ -1,7 +1,7 @@
 #include "Stacks.h"
 
 // Function to initialize the stack
-void init(struct stack* s) {
+void InitStack(struct stack* s) {
     s->top = -1; // Initialize top to -1 indicating the stack is empty
 }
 

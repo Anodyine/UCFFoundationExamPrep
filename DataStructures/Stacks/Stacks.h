@@ -13,7 +13,7 @@ struct stack {
 };
 
 // Function to initialize the stack
-void init(struct stack* s);
+void InitStack(struct stack* s);
 
 // Function to check if the stack is empty
 int isEmpty(struct stack* s);
