@@ -1,8 +1,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
-#define INCREASING 1;
-#define DECREASING 2;
 
 void selectionSort (int* array, int arraySize, int direction) {
     for (int i = 0; i < arraySize; i++) {
