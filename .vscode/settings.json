@@ -11,6 +11,7 @@
         "linkedstack.h": "c",
         "binarytree.h": "c",
         "linkedqueue.h": "c",
-        "arraystack.h": "c"
+        "arraystack.h": "c",
+        "stdbool.h": "c"
     }
 }
