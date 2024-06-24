@@ -24,5 +24,5 @@ int binarySearch (int* sortedArray, int size, int target) {
 int main (int) {
     int array[5] = {11, 12, 22, 25, 64};
 
-    printf("The target is at index: %d", binarySearch(array, 5, 22));
+    printf("The target is at index: %d", binarySearch(array, 5, 9));
 }
