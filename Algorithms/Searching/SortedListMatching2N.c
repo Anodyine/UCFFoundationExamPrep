@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 int findMatchingNumbers(int array1[], int array2[], int result[], int size) {
-    int searchResult;
     int numMatches = 0;
     int i = 0;
     int j = 0;
