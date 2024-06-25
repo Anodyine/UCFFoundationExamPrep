@@ -3,7 +3,7 @@
 
 #include "../../DataStructures/Stacks/ArrayStack.h"
 
-#define NUM_DISKS 5
+#define NUM_DISKS 8
 
 void checkAndMove(struct ArrayStack* sourceTower, struct ArrayStack* destTower) {
     if (ArrayStack_IsEmpty(sourceTower)){
