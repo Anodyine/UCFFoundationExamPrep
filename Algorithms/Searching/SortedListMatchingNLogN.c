@@ -22,6 +22,7 @@ int binarySearch (int* sortedArray, int size, int target) {
 }
 
 int findMatchingNumbers(int array1[], int array2[], int result[], int size) {
+    int searchResult;
     int numMatches = 0;
     for (int i = 0; i < size; i++) {
         searchResult = binarySearch(array2, size, array1[i]);
