@@ -7,10 +7,10 @@
 #define ARRAY_STACK_MAX_SIZE 100
 
 // Define the structure for the stack
-struct ArrayStack {
+typedef struct ArrayStack {
     int data[ARRAY_STACK_MAX_SIZE]; // Array to store stack elements
     int top;            // Index of the top element
-};
+} ArrayStack;
 
 // Function to initialize the stack
 void ArrayStack_init(struct ArrayStack* s);
