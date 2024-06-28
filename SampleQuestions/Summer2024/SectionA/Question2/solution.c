@@ -61,4 +61,9 @@ int main (int) {
 
     printf("After moveHeadnearTail: \n");
     printMyList (head);
+
+    free(head);
+    free(head->next);
+    free(head->next->next);
+    free(head->next->next->next);
 }
