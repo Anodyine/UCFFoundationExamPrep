@@ -5,3 +5,4 @@
 #include "Queues/CircularQueue.c"
 #include "Queues/LinkedQueue.c"
 #include "BinaryTrees/BinaryTree.c"
+#include "BinaryTrees/BinarySearchTree.c"
