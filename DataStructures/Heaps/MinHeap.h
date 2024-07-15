@@ -15,7 +15,7 @@ MinHeap* new_MinHeap (int capacity);
 void MinHeap_Heapify (MinHeap* heap, int index);
 void MinHeap_Build (MinHeap* heap, int array[], int length);
 void MinHeap_Insert (MinHeap* heap, int value);
-
 void MinHeap_Destroy (MinHeap* heap);
+void Heapsort (int array[], int length);
 
 #endif

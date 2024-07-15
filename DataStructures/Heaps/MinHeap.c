@@ -22,7 +22,7 @@ void MinHeap_Build (MinHeap* heap, int array[], int length) {
     heap->size = length;
     memcpy(heap->elements, array, sizeof(int) * length);
 
-    for (int i = length/2; i < length; i++) {
+    for (int i = length/2 - 1; i >= 0; i--) {
         MinHeap_Heapify(heap, i);
     }
 }
@@ -30,14 +30,13 @@ void MinHeap_Build (MinHeap* heap, int array[], int length) {
 void MinHeap_Heapify (MinHeap* heap, int index) {
     int leftIndex = MinHeap_GetLeftChildIndex(index);
     int rightIndex = MinHeap_GetRightChildIndex(index);
-
     int indexOfSmallest = index;
 
-    if (leftIndex < heap->size - 1 && heap->elements[leftIndex] < heap->elements[indexOfSmallest]) {
+    if (leftIndex < heap->size && heap->elements[leftIndex] < heap->elements[indexOfSmallest]) {
         indexOfSmallest = leftIndex;
     }
 
-    if (rightIndex < heap->size - 1 && heap->elements[rightIndex] < heap->elements[indexOfSmallest]) {
+    if (rightIndex < heap->size && heap->elements[rightIndex] < heap->elements[indexOfSmallest]) {
         indexOfSmallest = rightIndex;
     }
 
@@ -55,8 +54,8 @@ void MinHeap_Insert (MinHeap* heap, int value) {
         return;
     }
 
-    for (int i = 0; i < heap->size; i++) {
-        heap[i + 1] = heap[i];
+    for (int i = heap->size; i > 0; i--) {
+        heap[i] = heap[i - 1];
     }
     heap->elements[0] = value;
     heap->size++;
@@ -69,4 +68,17 @@ void MinHeap_Destroy (MinHeap* heap) {
     heap->elements = NULL;
     free(heap);
     heap = NULL;
+}
+
+void Heapsort (int array[], int length) {
+    MinHeap *heap = new_MinHeap(400);
+    MinHeap_Build(heap, array, length);
+    for (int i = 0; i < length; i++) {
+        array[i] = heap->elements[0];
+        heap->elements[0] = heap->elements[heap->size - 1];
+        heap->size--;
+        MinHeap_Heapify(heap, 0);
+    }
+
+    MinHeap_Destroy(heap);
 }
