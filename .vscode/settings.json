@@ -12,6 +12,7 @@
         "binarytree.h": "c",
         "linkedqueue.h": "c",
         "arraystack.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "minheap.h": "c"
     }
 }

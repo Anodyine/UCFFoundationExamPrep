@@ -6,3 +6,4 @@
 #include "Queues/LinkedQueue.c"
 #include "BinaryTrees/BinaryTree.c"
 #include "BinaryTrees/BinarySearchTree.c"
+#include "Heaps/MinHeap.c"
