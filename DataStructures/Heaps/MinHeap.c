@@ -9,7 +9,6 @@ MinHeap* new_MinHeap (int capacity) {
     return newHeap;
 }
 
-
 int MinHeap_GetLeftChildIndex (int index) {
     return 2*(index + 1) - 1;
 }
