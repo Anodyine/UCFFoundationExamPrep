@@ -22,7 +22,7 @@ TrieNode* new_TrieNode() {
     return node;
 }
 
-void insert(TrieNode* currentNode, const char* word) {
+void Trie_Insert(TrieNode* currentNode, const char* word) {
     int index = word[0] - 'a';
     
     if (!currentNode->children[index]) {
@@ -34,10 +34,10 @@ void insert(TrieNode* currentNode, const char* word) {
         return;
     }
 
-    insert(currentNode->children[index], (word + 1));
+    Trie_Insert(currentNode->children[index], (word + 1));
 }
 
-bool search(TrieNode* currentNode, const char* word) {
+bool Trie_Search(TrieNode* currentNode, const char* word) {
     if (currentNode == NULL) {
         return false;
     }
@@ -47,7 +47,7 @@ bool search(TrieNode* currentNode, const char* word) {
     }
 
     int index = word[0] - 'a';
-    return search(currentNode->children[index], (word + 1));
+    return Trie_Search(currentNode->children[index], (word + 1));
 }
 
 // Main function to test the Trie implementation
@@ -60,7 +60,7 @@ int main() {
 
     // Insert words into the Trie
     for (int i = 0; i < n; i++) {
-        insert(root, words[i]);
+        Trie_Insert(root, words[i]);
     }
 
     // Search for words in the Trie and print the result
@@ -68,7 +68,7 @@ int main() {
     int q = sizeof(queries) / sizeof(queries[0]);
 
     for (int i = 0; i < q; i++) {
-        printf("Search for \"%s\": %s\n", queries[i], search(root, queries[i]) ? "Found" : "Not Found");
+        printf("Search for \"%s\": %s\n", queries[i], Trie_Search(root, queries[i]) ? "Found" : "Not Found");
     }
 
     return 0;
