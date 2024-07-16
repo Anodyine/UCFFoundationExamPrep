@@ -50,6 +50,29 @@ bool Trie_Search(TrieNode* currentNode, const char* word) {
     return Trie_Search(currentNode->children[index], (word + 1));
 }
 
+void Trie_DestroyAllChildren (TrieNode* currentNode) {
+    for(int i = 0; i < ALPHABET_SIZE; i++) {
+        if (currentNode->children[i] != NULL) {
+            Trie_DestroyAllChildren(currentNode->children[i]);
+            free(currentNode->children[i]);
+            currentNode->children[i] = NULL;
+        }
+    }
+}
+
+void Trie_Destroy (TrieNode* root) {
+    Trie_DestroyAllChildren(root);
+    
+    for(int i = 0; i < ALPHABET_SIZE; i++) {
+        if (root->children[i] != NULL) {
+            printf("child was not deleted.");
+        }
+    }
+
+    free(root);
+    root = NULL;
+}
+
 // Main function to test the Trie implementation
 int main() {
     // Array of words to be inserted
@@ -71,5 +94,6 @@ int main() {
         printf("Search for \"%s\": %s\n", queries[i], Trie_Search(root, queries[i]) ? "Found" : "Not Found");
     }
 
+    Trie_Destroy(root);
     return 0;
 }
