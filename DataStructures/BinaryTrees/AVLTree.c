@@ -74,7 +74,6 @@ AVLTreeNode* AVLTree_Insert(AVLTreeNode* node, int value) {
     }
     else if (value < node->value) {
         node->left = AVLTree_Insert(node->left, value);
-        AVLTree_SetHeight(node->left);
         if (AVLTree_GetHeight(node->left) - AVLTree_GetHeight(node->right) > 1) {
             if (value < node->left->value) {
                 node = AVLTree_RotateRight(node);
@@ -85,7 +84,6 @@ AVLTreeNode* AVLTree_Insert(AVLTreeNode* node, int value) {
     }
     else if (value > node->value) {
         node->right = AVLTree_Insert(node->right, value);
-        AVLTree_SetHeight(node->right);
         if (AVLTree_GetHeight(node->left) - AVLTree_GetHeight(node->right) < -1) {
             if (value > node->right->value) {
                 node = AVLTree_RotateLeft(node);
