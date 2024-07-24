@@ -1,11 +1,15 @@
 #include "AVLTree.h"
 
-void AVLTree_SetHeight(AVLTreeNode* currentNode, int newHeight) {
-    if (newHeight > currentNode->height) {
-        currentNode->height = newHeight;
+void AVLTree_SetHeight(AVLTreeNode* currentNode) {
+    int newHeight = 1;
+    if (currentNode->left != NULL)
+        newHeight = currentNode->left->height + 1;
+    if (currentNode->right != NULL && currentNode->right->height + 1 > newHeight) {
+        newHeight = currentNode->right->height + 1;
     }
+    currentNode->height = newHeight;
     if (currentNode->parent != NULL) {
-        AVLTree_SetHeight(currentNode->parent, currentNode->height + 1);
+        AVLTree_SetHeight(currentNode->parent);
     }
 }
 
@@ -17,41 +21,32 @@ AVLTreeNode* new_AVLTreeNode (int value, AVLTreeNode* parent) {
     node->right = NULL;
     node->left = NULL;
 
-    if (parent != NULL) {
-        AVLTree_SetHeight(parent, node->height + 1);
-    }
-
     return node;
 }
 
 AVLTreeNode* AVLTree_RotateRight (AVLTreeNode* currentNode) {
+    if (currentNode->left == NULL || currentNode->left->right == NULL) {
+        return currentNode;
+    }
     // Store the value that will be the new left node and update the left node
     AVLTreeNode* newLeft = currentNode->left->right;
     AVLTreeNode* newRoot = currentNode->left;
     newRoot->right = currentNode;
     newRoot->parent = currentNode->parent;
 
-    // Update the parent node
-    if (currentNode->parent != NULL) {
-        if (currentNode->parent->left == currentNode){
-            currentNode->parent->left = newRoot;
-            if (currentNode->right == NULL || currentNode->height - 1 > currentNode->parent->right->height) {
-                currentNode->parent->height = currentNode->height;
-            }
-        }
-        if (currentNode->parent->right == currentNode){
-            currentNode->parent->right = newRoot;
-            if (currentNode->left == NULL || currentNode->height - 1 > currentNode->parent->left->height) {
-                currentNode->parent->height = currentNode->height;
-            }
-        }
-    }
-
     // Update the current node
     currentNode->parent = newRoot;
     currentNode->left = newLeft;
-    currentNode->height-=2;
 
+    if (newRoot->parent != NULL) {
+        if (newRoot->parent->left == currentNode){
+            newRoot->parent->left = newRoot;
+        }
+        if (newRoot->parent->right == currentNode){
+            newRoot->parent->right = newRoot;
+        }
+    }
+    AVLTree_SetHeight(currentNode);
     // Update the parent of the new left node
     if (currentNode->left != NULL) {
         currentNode->left->parent = currentNode;
@@ -61,28 +56,30 @@ AVLTreeNode* AVLTree_RotateRight (AVLTreeNode* currentNode) {
 }
 
 AVLTreeNode* AVLTree_RotateLeft (AVLTreeNode* currentNode) {
+    if (currentNode->right == NULL || currentNode->right->left == NULL) {
+        return currentNode;
+    }
     // Store the value that will be the new left node and update the left node
     AVLTreeNode* newRight = currentNode->right->left;
     AVLTreeNode* newRoot = currentNode->right;
     newRoot->left = currentNode;
     newRoot->parent = currentNode->parent;
 
-    // Update the parent node
-    if (currentNode->parent != NULL) {
-        if (currentNode->parent->left == currentNode){
-            currentNode->parent->left = newRoot;
-        }
-        if (currentNode->parent->right == currentNode){
-            currentNode->parent->right = newRoot;
-        }
-    }
-
    // Update the current node
     currentNode->parent = newRoot;
     currentNode->right = newRight;
-    currentNode->height-=2;
 
-    // Update the parent of the new left node
+    if (newRoot->parent != NULL) {
+        if (newRoot->parent->left == currentNode){
+            newRoot->parent->left = newRoot;
+        }
+        if (newRoot->parent->right == currentNode){
+            newRoot->parent->right = newRoot;
+        }
+    }
+
+    AVLTree_SetHeight(currentNode);
+    // Update the parent of the new right node
     if (currentNode->right != NULL) {
         currentNode->right->parent = currentNode;
     }
@@ -117,14 +114,12 @@ AVLTreeNode* AVLTree_Balance (AVLTreeNode* currentNode, int value) {
             currentNode->right = AVLTree_RotateRight(currentNode->right);
             newRoot = AVLTree_RotateLeft(currentNode);
         }
-    } 
-    // else {
-    //     if (balanceFactor < -1) {
-    //         if(currentNode->right != NULL)
-    //             currentNode->right = AVLTree_RotateRight(currentNode->right);
-    //         newRoot = AVLTree_RotateLeft(currentNode);
-    //     } 
-    // }
+    } else {
+        if (currentNode->right != NULL && balanceFactor < -1) {
+            currentNode->right = AVLTree_RotateRight(currentNode->right);
+            newRoot = AVLTree_RotateLeft(currentNode);
+        }
+    }
     if (currentNode->right != NULL) {
         if (balanceFactor < -1 && value > currentNode->right->value) {
             newRoot = AVLTree_RotateLeft(currentNode);
@@ -134,13 +129,12 @@ AVLTreeNode* AVLTree_Balance (AVLTreeNode* currentNode, int value) {
             newRoot = AVLTree_RotateRight(currentNode);
         }
     } 
-    // else {
-    //     if (balanceFactor > 1) {
-    //         if(currentNode->left != NULL)
-    //             currentNode->left = AVLTree_RotateLeft(currentNode->left);
-    //         newRoot = AVLTree_RotateRight(currentNode);
-    //     } 
-    // }
+    else {
+        if (currentNode->left != NULL && balanceFactor > 1) {
+            currentNode->left = AVLTree_RotateLeft(currentNode->left);
+            newRoot = AVLTree_RotateRight(currentNode);
+        }
+    }
 
     if (newRoot->parent != NULL){
         return AVLTree_Balance(newRoot->parent, value);
@@ -158,8 +152,10 @@ AVLTreeNode* AVLTree_Insert (AVLTreeNode* currentNode, int value) {
     if (currentNode->left == NULL && currentNode->right == NULL) { // if we are at a leaf
         if (currentNode->value < value) {
             currentNode->right = new_AVLTreeNode(value, currentNode);
+            AVLTree_SetHeight(currentNode);
         } else {
             currentNode->left = new_AVLTreeNode(value, currentNode);
+            AVLTree_SetHeight(currentNode);
         }
         return AVLTree_Balance(currentNode, value);
     }
@@ -170,6 +166,7 @@ AVLTreeNode* AVLTree_Insert (AVLTreeNode* currentNode, int value) {
             newNode = AVLTree_Insert(currentNode->right, value);
         } else {
             currentNode->right = new_AVLTreeNode(value, currentNode);
+            AVLTree_SetHeight(currentNode);
             return AVLTree_Balance(currentNode, value);
         }
     }
@@ -179,6 +176,7 @@ AVLTreeNode* AVLTree_Insert (AVLTreeNode* currentNode, int value) {
             newNode = AVLTree_Insert(currentNode->left, value);
         } else {
             currentNode->left = new_AVLTreeNode(value, currentNode);
+            AVLTree_SetHeight(currentNode);
             return AVLTree_Balance(currentNode, value);
         }
     }
@@ -210,10 +208,12 @@ void PrintTree(AVLTreeNode *current_ptr, char* positionString) {
 
 int main (int input) {
     AVLTreeNode* root = new_AVLTreeNode(8, NULL);
-    root = AVLTree_Insert (root, 1);
-    root = AVLTree_Insert (root, 2);
-    root = AVLTree_Insert (root, 3);
     root = AVLTree_Insert (root, 4);
+    root = AVLTree_Insert (root, 10);
+    root = AVLTree_Insert (root, 3);
+    root = AVLTree_Insert (root, 5);
+    root = AVLTree_Insert (root, 6);
+    root = AVLTree_Insert (root, 7);
 
     char positionString[500] = "Root";
     PrintTree(root, positionString);
