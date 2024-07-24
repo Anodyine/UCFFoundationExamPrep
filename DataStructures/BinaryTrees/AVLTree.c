@@ -1,9 +1,11 @@
 #include "AVLTree.h"
 
-void AVLTree_IncrementHeight(AVLTreeNode* currentNode) {
-    currentNode->height++;
+void AVLTree_SetHeight(AVLTreeNode* currentNode, int newHeight) {
+    if (newHeight > currentNode->height) {
+        currentNode->height = newHeight;
+    }
     if (currentNode->parent != NULL) {
-        AVLTree_IncrementHeight(currentNode->parent);
+        AVLTree_SetHeight(currentNode->parent, currentNode->height + 1);
     }
 }
 
@@ -16,7 +18,7 @@ AVLTreeNode* new_AVLTreeNode (int value, AVLTreeNode* parent) {
     node->left = NULL;
 
     if (parent != NULL) {
-        AVLTree_IncrementHeight(parent);
+        AVLTree_SetHeight(parent, node->height + 1);
     }
 
     return node;
@@ -33,9 +35,15 @@ AVLTreeNode* AVLTree_RotateRight (AVLTreeNode* currentNode) {
     if (currentNode->parent != NULL) {
         if (currentNode->parent->left == currentNode){
             currentNode->parent->left = newRoot;
+            if (currentNode->right == NULL || currentNode->height - 1 > currentNode->parent->right->height) {
+                currentNode->parent->height = currentNode->height;
+            }
         }
         if (currentNode->parent->right == currentNode){
             currentNode->parent->right = newRoot;
+            if (currentNode->left == NULL || currentNode->height - 1 > currentNode->parent->left->height) {
+                currentNode->parent->height = currentNode->height;
+            }
         }
     }
 
@@ -101,12 +109,38 @@ AVLTreeNode* AVLTree_Balance (AVLTreeNode* currentNode, int value) {
     }
 
     AVLTreeNode* newRoot = currentNode;
-    if (balanceFactor > 1 && value < currentNode->left->value) {
-        newRoot = AVLTree_RotateRight(currentNode);
-    }
-    if (balanceFactor < -1 && value > currentNode->right->value) {
-        newRoot = AVLTree_RotateLeft(currentNode);
-    }
+    if (currentNode->left != NULL) {
+        if (balanceFactor > 1 && value < currentNode->left->value) {
+            newRoot = AVLTree_RotateRight(currentNode);
+        }
+        if (balanceFactor < -1 && value < currentNode->left->value) {
+            currentNode->right = AVLTree_RotateRight(currentNode->right);
+            newRoot = AVLTree_RotateLeft(currentNode);
+        }
+    } 
+    // else {
+    //     if (balanceFactor < -1) {
+    //         if(currentNode->right != NULL)
+    //             currentNode->right = AVLTree_RotateRight(currentNode->right);
+    //         newRoot = AVLTree_RotateLeft(currentNode);
+    //     } 
+    // }
+    if (currentNode->right != NULL) {
+        if (balanceFactor < -1 && value > currentNode->right->value) {
+            newRoot = AVLTree_RotateLeft(currentNode);
+        } 
+        if (balanceFactor > 1 && value > currentNode->right->value) {
+            currentNode->left = AVLTree_RotateLeft(currentNode->left);
+            newRoot = AVLTree_RotateRight(currentNode);
+        }
+    } 
+    // else {
+    //     if (balanceFactor > 1) {
+    //         if(currentNode->left != NULL)
+    //             currentNode->left = AVLTree_RotateLeft(currentNode->left);
+    //         newRoot = AVLTree_RotateRight(currentNode);
+    //     } 
+    // }
 
     if (newRoot->parent != NULL){
         return AVLTree_Balance(newRoot->parent, value);
@@ -160,7 +194,7 @@ void PrintTree(AVLTreeNode *current_ptr, char* positionString) {
         return;
     }
 
-    printf("%s: %d \n", positionString, current_ptr->value);
+    printf("%s: %d, Height: %d \n", positionString, current_ptr->value, current_ptr->height);
 
     char leftPosStr[500];
     strcpy(leftPosStr, positionString);
@@ -175,12 +209,12 @@ void PrintTree(AVLTreeNode *current_ptr, char* positionString) {
 }
 
 int main (int input) {
-    AVLTreeNode* root = new_AVLTreeNode(5, NULL);
-    char positionString[500] = "Root";
-    root = AVLTree_Insert (root, 6);
-    root = AVLTree_Insert (root, 7);
-    root = AVLTree_Insert (root, 4);
+    AVLTreeNode* root = new_AVLTreeNode(8, NULL);
+    root = AVLTree_Insert (root, 1);
+    root = AVLTree_Insert (root, 2);
     root = AVLTree_Insert (root, 3);
+    root = AVLTree_Insert (root, 4);
 
+    char positionString[500] = "Root";
     PrintTree(root, positionString);
 }
