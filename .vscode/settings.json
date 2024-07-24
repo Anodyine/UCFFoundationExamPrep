@@ -15,6 +15,8 @@
         "stdbool.h": "c",
         "minheap.h": "c",
         "avltree.h": "c",
-        "binarysearchtree.h": "c"
+        "binarysearchtree.h": "c",
+        "type_traits": "c",
+        "math.h": "c"
     }
 }
