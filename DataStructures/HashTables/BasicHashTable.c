@@ -19,8 +19,13 @@ BasicHashTable* new_BasicHashTable (int capacity, int elementSize) {
 
 int BasicHashTable_Hash (BasicHashTable* table, const char* key) {
     int keySize = strlen(key);
+    int hashedKey = 0;
 
-    return (key[0] + key[1] + key[2] + key[keySize-2] + key[keySize-1])*252 % table->capacity;
+    for (int i = 0; i < keySize; i++) {
+        hashedKey += key[i];
+    }
+
+    return hashedKey*252 % table->capacity;
 }
 
 void BasicHashTable_Insert (BasicHashTable* table, const char* key, void* obj) {
@@ -29,12 +34,12 @@ void BasicHashTable_Insert (BasicHashTable* table, const char* key, void* obj) {
     }
     int hashResult = BasicHashTable_Hash(table, key);
     memcpy((table->elements + hashResult), obj, table->elementSize);
-    printf("\nThe hash key is: %d", hashResult);
+    printf("\nThe hashedKey is: %d", hashResult);
 }
 
 void* BasicHashTable_Retrieve (BasicHashTable* table, const char* key) {
     int hashResult = BasicHashTable_Hash(table, key);
-    printf("\nThe hash key is: %d", hashResult);
+    printf("\nThe hashedKey is: %d", hashResult);
     return (table->elements + hashResult);
 }
 
