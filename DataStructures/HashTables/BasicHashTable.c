@@ -34,12 +34,16 @@ int BasicHashTable_Hash (BasicHashTable* table, const char* key) {
     int keySize = strlen(key);
     int hashedKey = 0;
 
-    hashedKey = key[0] + key[1] + key[keySize - 1] + key[keySize - 2];
+    hashedKey = key[0] + key[1] + key[keySize - 1] + key[keySize - 2]; // hash function intentionally chosen to create a collision
     // for (int i = 0; i < keySize; i++) {
     //     hashedKey += key[i];
     // }
 
-    return hashedKey*252 % table->capacity;
+    return hashedKey*251 % table->capacity;
+}
+
+int BasicHashTable_LinearProbe(BasicHashTable* table, int hashResult) {
+    return (hashResult + 1)%table->capacity;
 }
 
 void BasicHashTable_Insert (BasicHashTable* table, const char* key, void* obj) {
@@ -49,7 +53,7 @@ void BasicHashTable_Insert (BasicHashTable* table, const char* key, void* obj) {
     int hashResult = BasicHashTable_Hash(table, key);
     while (table->elements[hashResult]->data != NULL) { //while we haven't found an empty space
         printf("\n linear probe required for insert");
-        hashResult = (hashResult + 1) % table->capacity;
+        hashResult = BasicHashTable_LinearProbe(table, hashResult);
     }
 
     strcpy(table->elements[hashResult]->key, key);
@@ -66,7 +70,7 @@ void* BasicHashTable_Retrieve (BasicHashTable* table, const char* key) {
 
     while (key[0] != table->elements[hashResult]->key[0] 
         || !strcmp(key, table->elements[hashResult]->key) == 0) { // while we haven't found the matching key
-        hashResult = (hashResult + 1)%table->capacity;
+        hashResult = BasicHashTable_LinearProbe(table, hashResult);
         printf("\n linear probe required for retrieve");
         if (table->elements[hashResult]->data == NULL) {
             return NULL;
