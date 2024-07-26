@@ -76,23 +76,7 @@ void* BasicHashTable_Retrieve (BasicHashTable* table, const char* key) {
     return (*(table->elements + hashResult))->data;
 }
 
-int compareInts (void* a, void* b) { 
-    int value1 = *((int*)a);
-    int value2 = *((int*)b);
-
-    if (value1 > value2) {
-        return 1;
-    }
-
-    if (value1 < value2) {
-        return -1;
-    }
-
-    return 0;
-}
-
 int main (int input) {
-    int (*compareFunctionPointer)(void*,void*) = &compareInts;
     int zero = 0;
     BasicHashTable* intTable = new_BasicHashTable(500, sizeof(int));
     int value = 16;
