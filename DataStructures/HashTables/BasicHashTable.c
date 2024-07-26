@@ -10,18 +10,18 @@ typedef struct _TableEntry {
 } TableEntry;
 
 typedef struct _BasicHashTable {
-    int capacity;
+    int maxEntries;
     int dataTypeSize;
     TableEntry** entries;
 } BasicHashTable;
 
-BasicHashTable* new_BasicHashTable (int capacity, int dataTypeSize) {
+BasicHashTable* new_BasicHashTable (int maxEntries, int dataTypeSize) {
     BasicHashTable* newTable = malloc(sizeof(BasicHashTable)) ;
-    newTable->capacity = capacity;
+    newTable->maxEntries = maxEntries;
     newTable->dataTypeSize = dataTypeSize;
-    newTable->entries = malloc(capacity*sizeof(TableEntry*));
+    newTable->entries = malloc(maxEntries*sizeof(TableEntry*));
 
-    for (int i = 0; i < capacity; i++){
+    for (int i = 0; i < maxEntries; i++){
         newTable->entries[i] = malloc(sizeof(TableEntry));
         strcpy(newTable->entries[i]->key, "\0");
         newTable->entries[i]->data = NULL;
@@ -39,11 +39,11 @@ int BasicHashTable_Hash (BasicHashTable* table, const char* key) {
     //     hashedKey += key[i];
     // }
 
-    return hashedKey*251 % table->capacity;
+    return hashedKey*251 % table->maxEntries;
 }
 
 int BasicHashTable_LinearProbe(BasicHashTable* table, int hashResult) {
-    return (hashResult + 1)%table->capacity;
+    return (hashResult + 1)%table->maxEntries;
 }
 
 void BasicHashTable_Insert (BasicHashTable* table, const char* key, void* obj) {
