@@ -22,9 +22,9 @@ BasicHashTable* new_BasicHashTable (int capacity, int elementSize) {
     newTable->elements = malloc(capacity*sizeof(TableEntry*));
 
     for (int i = 0; i < capacity; i++){
-        *(newTable->elements + i) = malloc(sizeof(TableEntry));
-        strcpy((*(newTable->elements + i))->key, "\0");
-        (*(newTable->elements + i))->data = NULL;
+        newTable->elements[i] = malloc(sizeof(TableEntry));
+        strcpy(newTable->elements[i]->key, "\0");
+        newTable->elements[i]->data = NULL;
     }
 
     return newTable;
@@ -47,33 +47,33 @@ void BasicHashTable_Insert (BasicHashTable* table, const char* key, void* obj) {
         return;
     }
     int hashResult = BasicHashTable_Hash(table, key);
-    while ((*(table->elements + hashResult))->data != NULL) { //while we haven't found an empty space
+    while (table->elements[hashResult]->data != NULL) { //while we haven't found an empty space
         printf("\n linear probe required for insert");
         hashResult = (hashResult + 1) % table->capacity;
     }
 
-    strcpy((*(table->elements + hashResult))->key, key);
-    (*(table->elements + hashResult))->data = malloc(sizeof(table->elementSize));
-    memcpy((*(table->elements + hashResult))->data, obj, table->elementSize);
+    strcpy(table->elements[hashResult]->key, key);
+    table->elements[hashResult]->data = malloc(sizeof(table->elementSize));
+    memcpy(table->elements[hashResult]->data, obj, table->elementSize);
 }
 
 void* BasicHashTable_Retrieve (BasicHashTable* table, const char* key) {
     int hashResult = BasicHashTable_Hash(table, key);
 
-    if ((*(table->elements + hashResult))->data == NULL) {
+    if (table->elements[hashResult]->data == NULL) {
         return NULL;
     }
 
-    while (key[0] != (*(table->elements + hashResult))->key[0] 
-        || !strcmp(key, (*(table->elements + hashResult))->key) == 0) { // while we haven't found the matching key
+    while (key[0] != table->elements[hashResult]->key[0] 
+        || !strcmp(key, table->elements[hashResult]->key) == 0) { // while we haven't found the matching key
         hashResult = (hashResult + 1)%table->capacity;
         printf("\n linear probe required for retrieve");
-        if ((*(table->elements + hashResult))->data == NULL) {
+        if (table->elements[hashResult]->data == NULL) {
             return NULL;
         }
     }
 
-    return (*(table->elements + hashResult))->data;
+    return table->elements[hashResult]->data;
 }
 
 int main (int input) {
