@@ -30,7 +30,7 @@ BasicHashTable* new_BasicHashTable (int maxEntries, int dataTypeSize) {
     return newTable;
 }
 
-int BasicHashTable_Hash (BasicHashTable* table, const char* key) {
+int BasicHashTable_CreateIndexFromKey (BasicHashTable* table, const char* key) {
     int keySize = strlen(key);
     int hashedKey = 0;
 
@@ -42,42 +42,57 @@ int BasicHashTable_Hash (BasicHashTable* table, const char* key) {
     return hashedKey*251 % table->maxEntries;
 }
 
-int BasicHashTable_LinearProbe(BasicHashTable* table, int hashResult) {
-    return (hashResult + 1)%table->maxEntries;
+int BasicHashTable_LinearProbe(BasicHashTable* table, int createdIndex) {
+    return (createdIndex + 1)%table->maxEntries;
 }
 
-void BasicHashTable_Insert (BasicHashTable* table, const char* key, void* obj) {
+void BasicHashTable_Insert (BasicHashTable* table, char* key, void* obj) {
     if (key == 0 || obj == NULL) {
         return;
     }
-    int hashResult = BasicHashTable_Hash(table, key);
-    while (table->entries[hashResult]->data != NULL) { //while we haven't found an empty space
+    int createdIndex = BasicHashTable_CreateIndexFromKey(table, key);
+    while (table->entries[createdIndex]->data != NULL) { //while we haven't found an empty space
         printf("\n linear probe required for insert");
-        hashResult = BasicHashTable_LinearProbe(table, hashResult);
+        createdIndex = BasicHashTable_LinearProbe(table, createdIndex);
     }
 
-    strcpy(table->entries[hashResult]->key, key);
-    table->entries[hashResult]->data = malloc(sizeof(table->dataTypeSize));
-    memcpy(table->entries[hashResult]->data, obj, table->dataTypeSize);
+    strcpy(table->entries[createdIndex]->key, key);
+    table->entries[createdIndex]->data = malloc(sizeof(table->dataTypeSize));
+    memcpy(table->entries[createdIndex]->data, obj, table->dataTypeSize);
 }
 
-void* BasicHashTable_Retrieve (BasicHashTable* table, const char* key) {
-    int hashResult = BasicHashTable_Hash(table, key);
+bool stringsAreEqual(char* str1, char* str2)
+{
+    int i = 0;
 
-    if (table->entries[hashResult]->data == NULL) {
+    while(str1[i]==str2[i])
+    {
+        if(str1[i]=='\0'||str2[i]=='\0')
+            break;
+        i++;
+    }
+    if(str1[i]=='\0' && str2[i]=='\0')
+        return true;
+    else
+        return false;
+}
+
+void* BasicHashTable_Retrieve (BasicHashTable* table, char* key) {
+    int createdIndex = BasicHashTable_CreateIndexFromKey(table, key);
+
+    if (table->entries[createdIndex]->data == NULL) {
         return NULL;
     }
 
-    while (key[0] != table->entries[hashResult]->key[0] 
-        || !strcmp(key, table->entries[hashResult]->key) == 0) { // while we haven't found the matching key
-        hashResult = BasicHashTable_LinearProbe(table, hashResult);
+    while (!stringsAreEqual(key, table->entries[createdIndex]->key)) { // while we haven't found the matching key
+        createdIndex = BasicHashTable_LinearProbe(table, createdIndex);
         printf("\n linear probe required for retrieve");
-        if (table->entries[hashResult]->data == NULL) {
+        if (table->entries[createdIndex]->data == NULL) {
             return NULL;
         }
     }
 
-    return table->entries[hashResult]->data;
+    return table->entries[createdIndex]->data;
 }
 
 int main (int input) {
