@@ -11,20 +11,20 @@ typedef struct _TableEntry {
 
 typedef struct _BasicHashTable {
     int capacity;
-    int elementSize;
-    TableEntry** elements;
+    int dataTypeSize;
+    TableEntry** entries;
 } BasicHashTable;
 
-BasicHashTable* new_BasicHashTable (int capacity, int elementSize) {
+BasicHashTable* new_BasicHashTable (int capacity, int dataTypeSize) {
     BasicHashTable* newTable = malloc(sizeof(BasicHashTable)) ;
     newTable->capacity = capacity;
-    newTable->elementSize = elementSize;
-    newTable->elements = malloc(capacity*sizeof(TableEntry*));
+    newTable->dataTypeSize = dataTypeSize;
+    newTable->entries = malloc(capacity*sizeof(TableEntry*));
 
     for (int i = 0; i < capacity; i++){
-        newTable->elements[i] = malloc(sizeof(TableEntry));
-        strcpy(newTable->elements[i]->key, "\0");
-        newTable->elements[i]->data = NULL;
+        newTable->entries[i] = malloc(sizeof(TableEntry));
+        strcpy(newTable->entries[i]->key, "\0");
+        newTable->entries[i]->data = NULL;
     }
 
     return newTable;
@@ -51,33 +51,33 @@ void BasicHashTable_Insert (BasicHashTable* table, const char* key, void* obj) {
         return;
     }
     int hashResult = BasicHashTable_Hash(table, key);
-    while (table->elements[hashResult]->data != NULL) { //while we haven't found an empty space
+    while (table->entries[hashResult]->data != NULL) { //while we haven't found an empty space
         printf("\n linear probe required for insert");
         hashResult = BasicHashTable_LinearProbe(table, hashResult);
     }
 
-    strcpy(table->elements[hashResult]->key, key);
-    table->elements[hashResult]->data = malloc(sizeof(table->elementSize));
-    memcpy(table->elements[hashResult]->data, obj, table->elementSize);
+    strcpy(table->entries[hashResult]->key, key);
+    table->entries[hashResult]->data = malloc(sizeof(table->dataTypeSize));
+    memcpy(table->entries[hashResult]->data, obj, table->dataTypeSize);
 }
 
 void* BasicHashTable_Retrieve (BasicHashTable* table, const char* key) {
     int hashResult = BasicHashTable_Hash(table, key);
 
-    if (table->elements[hashResult]->data == NULL) {
+    if (table->entries[hashResult]->data == NULL) {
         return NULL;
     }
 
-    while (key[0] != table->elements[hashResult]->key[0] 
-        || !strcmp(key, table->elements[hashResult]->key) == 0) { // while we haven't found the matching key
+    while (key[0] != table->entries[hashResult]->key[0] 
+        || !strcmp(key, table->entries[hashResult]->key) == 0) { // while we haven't found the matching key
         hashResult = BasicHashTable_LinearProbe(table, hashResult);
         printf("\n linear probe required for retrieve");
-        if (table->elements[hashResult]->data == NULL) {
+        if (table->entries[hashResult]->data == NULL) {
             return NULL;
         }
     }
 
-    return table->elements[hashResult]->data;
+    return table->entries[hashResult]->data;
 }
 
 int main (int input) {
