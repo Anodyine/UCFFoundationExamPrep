@@ -4,11 +4,16 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+typedef struct _TableEntry {
+    char key[500];
+    void* data;
+} TableEntry;
+
 typedef struct _BasicHashTable {
     int capacity;
     int elementSize;
     void* emptyValue;
-    void** elements;
+    TableEntry** elements;
 } BasicHashTable;
 
 BasicHashTable* new_BasicHashTable (int capacity, int elementSize, void* emptyValue) {
@@ -16,10 +21,13 @@ BasicHashTable* new_BasicHashTable (int capacity, int elementSize, void* emptyVa
     newTable->capacity = capacity;
     newTable->emptyValue = emptyValue;
     newTable->elementSize = elementSize;
-    newTable->elements = malloc(capacity*sizeof(void*)); // we need these to be set to 0 so we can check if they are empty later
+    newTable->elements = malloc(capacity*sizeof(TableEntry*));
 
-    for (int i = 0; i < capacity; i++)
-        *(newTable->elements + i) = calloc(capacity, elementSize); // we need these to be set to 0 so we can check if they are empty later
+    for (int i = 0; i < capacity; i++){
+        *(newTable->elements + i) = malloc(sizeof(TableEntry));
+        strcpy((*(newTable->elements + i))->key, "\0");
+        (*(newTable->elements + i))->data = NULL;
+    }
 
     return newTable;
 }
@@ -28,9 +36,10 @@ int BasicHashTable_Hash (BasicHashTable* table, const char* key) {
     int keySize = strlen(key);
     int hashedKey = 0;
 
-    for (int i = 0; i < keySize; i++) {
-        hashedKey += key[i];
-    }
+    hashedKey = key[0] + key[1] + key[keySize - 1] + key[keySize - 2];
+    // for (int i = 0; i < keySize; i++) {
+    //     hashedKey += key[i];
+    // }
 
     return hashedKey*252 % table->capacity;
 }
@@ -40,17 +49,33 @@ void BasicHashTable_Insert (BasicHashTable* table, const char* key, void* obj) {
         return;
     }
     int hashResult = BasicHashTable_Hash(table, key);
-    memcpy(*(table->elements + hashResult), obj, table->elementSize);
-    printf("\nThe hashedKey is: %d", hashResult);
+    while ((*(table->elements + hashResult))->data != NULL) { //while we haven't found an empty space
+        printf("\n linear probe required for insert");
+        hashResult = (hashResult + 1) % table->capacity;
+    }
+
+    strcpy((*(table->elements + hashResult))->key, key);
+    (*(table->elements + hashResult))->data = malloc(sizeof(table->elementSize));
+    memcpy((*(table->elements + hashResult))->data, obj, table->elementSize);
 }
 
-void* BasicHashTable_Retrieve (BasicHashTable* table, const char* key, int (*compareFunction)(void*,void*)) {
+void* BasicHashTable_Retrieve (BasicHashTable* table, const char* key) {
     int hashResult = BasicHashTable_Hash(table, key);
-    printf("\nThe hashedKey is: %d", hashResult);
-    while (compareFunction(*(table->elements + hashResult), table->emptyValue) == 0) {
-        hashResult = (hashResult + 1)%table->capacity;
+
+    if ((*(table->elements + hashResult))->data == NULL) {
+        return NULL;
     }
-    return *(table->elements + hashResult);
+
+    while (key[0] != (*(table->elements + hashResult))->key[0] 
+        || !strcmp(key, (*(table->elements + hashResult))->key) == 0) { // while we haven't found the matching key
+        hashResult = (hashResult + 1)%table->capacity;
+        printf("\n linear probe required for retrieve");
+        if ((*(table->elements + hashResult))->data == NULL) {
+            return NULL;
+        }
+    }
+
+    return (*(table->elements + hashResult))->data;
 }
 
 int compareInts (void* a, void* b) { 
@@ -75,7 +100,6 @@ int main (int input) {
     int value = 16;
     char key[500];
     strcpy(key,"sixteen");
-    printf("\nthe value inserted is: %d", value);
     BasicHashTable_Insert(intTable, key, &value);
     value = 12;
     strcpy(key,"twelve");
@@ -84,12 +108,17 @@ int main (int input) {
     strcpy(key,"thirteen");
     BasicHashTable_Insert(intTable, key, &value);
 
-    int* result = (int*)BasicHashTable_Retrieve(intTable, "sixteen", compareFunctionPointer);
+
+    int* result = (int*)BasicHashTable_Retrieve(intTable, "sixteen");
     printf("\nthe value retrieved is: %d", *result);
-    result = (int*)BasicHashTable_Retrieve(intTable, "thirteen", compareFunctionPointer);
+    result = (int*)BasicHashTable_Retrieve(intTable, "thirteen");
     printf("\nthe value retrieved is: %d", *result);
-    result = (int*)BasicHashTable_Retrieve(intTable, "twelve", compareFunctionPointer);
+    result = (int*)BasicHashTable_Retrieve(intTable, "twelve");
     printf("\nthe value retrieved is: %d", *result);
-    result = (int*)BasicHashTable_Retrieve(intTable, "fifteen", compareFunctionPointer);
-    printf("\nthe value retrieved is: %d", *result);
+    result = (int*)BasicHashTable_Retrieve(intTable, "fifteen");
+    if (result == NULL) {
+        printf("\nthe value was not found");
+    } else {
+        printf("\nthe value retrieved is: %d", *result);
+    }
 }
