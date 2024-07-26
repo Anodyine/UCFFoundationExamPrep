@@ -12,14 +12,12 @@ typedef struct _TableEntry {
 typedef struct _BasicHashTable {
     int capacity;
     int elementSize;
-    void* emptyValue;
     TableEntry** elements;
 } BasicHashTable;
 
-BasicHashTable* new_BasicHashTable (int capacity, int elementSize, void* emptyValue) {
+BasicHashTable* new_BasicHashTable (int capacity, int elementSize) {
     BasicHashTable* newTable = malloc(sizeof(BasicHashTable)) ;
     newTable->capacity = capacity;
-    newTable->emptyValue = emptyValue;
     newTable->elementSize = elementSize;
     newTable->elements = malloc(capacity*sizeof(TableEntry*));
 
@@ -96,7 +94,7 @@ int compareInts (void* a, void* b) {
 int main (int input) {
     int (*compareFunctionPointer)(void*,void*) = &compareInts;
     int zero = 0;
-    BasicHashTable* intTable = new_BasicHashTable(500, sizeof(int), &zero);
+    BasicHashTable* intTable = new_BasicHashTable(500, sizeof(int));
     int value = 16;
     char key[500];
     strcpy(key,"sixteen");
