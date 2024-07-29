@@ -14,6 +14,21 @@
             "cppStandard": "gnu++17",
             "intelliSenseMode": "windows-gcc-x64",
             "compilerPath": "C:/msys64/mingw64/bin/gcc.exe"
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/usr/bin/gcc"
         }
     ],
     "version": 4
