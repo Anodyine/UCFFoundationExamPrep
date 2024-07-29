@@ -102,12 +102,17 @@ int main (int input) {
     char key[500];
     strcpy(key,"sixteen");
     BasicHashTable_Insert(intTable, key, &value);
+    printf("\n{%s}: %d was inserted", key, value);
+
     value = 12;
     strcpy(key,"twelve");
     BasicHashTable_Insert(intTable, key, &value);
+    printf("\n{%s}: %d was inserted", key, value);
+    
     value = 13;
     strcpy(key,"thirteen");
     BasicHashTable_Insert(intTable, key, &value);
+    printf("\n{%s}: %d was inserted", key, value);
 
 
     int* result = (int*)BasicHashTable_Retrieve(intTable, "sixteen");

@@ -1,6 +1,6 @@
 {
     "code-runner.executorMap": {
-        "c": "cd $dir && gcc $workspaceRoot\\DataStructures\\SharedDataStructures.c $fileNameWithoutExt.c -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "c": "cd $dir && gcc $workspaceRoot/DataStructures/SharedDataStructures.c $fileNameWithoutExt.c -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
     },
     "files.associations": {
         "stdlib.h": "c",

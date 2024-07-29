@@ -1,3 +1,5 @@
 *.exe
 *.o
 **/tempCodeRunnerFile.c
+DataStructures/HashTables/BasicHashTable
+DataStructures/HashTables/BasicHashTable.exe
