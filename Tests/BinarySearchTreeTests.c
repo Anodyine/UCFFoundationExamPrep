@@ -28,6 +28,43 @@ void PrintTreeBreadthFirst(BinarySearchTreeNode *current_ptr) {
         LinkedList_RemoveFirst(myList);
     } while (myList->length > 0);
 
+    printf("\n");
+    return;
+}
+
+void PrintTreeInorder (BinarySearchTreeNode *current_ptr) {
+    if (current_ptr == NULL) {
+        return;
+    }
+
+    PrintTreeInorder(current_ptr->left);
+    printf("%d ", current_ptr->data);
+    PrintTreeInorder(current_ptr->right);
+
+    return;
+}
+
+void PrintTreePreorder (BinarySearchTreeNode *current_ptr) {
+    if (current_ptr == NULL) {
+        return;
+    }
+
+    printf("%d ", current_ptr->data);
+    PrintTreePreorder(current_ptr->left);
+    PrintTreePreorder(current_ptr->right);
+
+    return;
+}
+
+void PrintTreePostorder (BinarySearchTreeNode *current_ptr) {
+    if (current_ptr == NULL) {
+        return;
+    }
+
+    PrintTreePostorder(current_ptr->left);
+    PrintTreePostorder(current_ptr->right);
+    printf("%d ", current_ptr->data);
+
     return;
 }
 
@@ -68,4 +105,10 @@ int main (int) {
 
     PrintTreeDepthFirst(root, positionString);
     PrintTreeBreadthFirst(root);
+    PrintTreeInorder(root);
+    printf("\n");
+    PrintTreePreorder(root);
+    printf("\n");
+    PrintTreePostorder(root);
+    printf("\n");
 }
