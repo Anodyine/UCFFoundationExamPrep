@@ -25,7 +25,7 @@ TrieNode* new_TrieNode() {
 void Trie_Insert(TrieNode* currentNode, const char* word) {
     int index = word[0] - 'a';
     
-    if (!currentNode->children[index]) {
+    if (currentNode->children[index] == NULL) {
         currentNode->children[index] = new_TrieNode();
     }
 
