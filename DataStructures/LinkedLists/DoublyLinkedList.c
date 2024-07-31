@@ -55,6 +55,28 @@ void* LinkedList_GetFirst (DoublyLinkedList* list) {
     return list->tail->data;
 }
 
+int LinkedList_RemoveFirst (DoublyLinkedList* list) {
+    if (list->length < 1) {
+        printf("You tried to remove from an empty list\n");
+        return -1;
+    }
+
+    free(list->tail->data);
+    list->tail->data = NULL;
+    if (list->head == list->tail) {
+        list->head = NULL;
+    }
+
+    DoublyLinkedNode* removedNode = list->tail;
+    list->tail = list->tail->previous;
+    if (list->tail != NULL) {
+        list->tail->next = NULL;
+    }
+
+    free(removedNode);
+    list->length--;
+}
+
 void* LinkedList_GetLast (DoublyLinkedList* list) {
     return list->head->data;
 }

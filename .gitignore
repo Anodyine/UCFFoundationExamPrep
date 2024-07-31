@@ -10,3 +10,5 @@ Algorithms/Sorting/SelectionSort.exe
 Algorithms/Sorting/SelectionSort
 InstallationTest/helloWorld.exe
 DataStructures/Trees/Trie
+Tests/BinarySearchTreeTests.exe
+Tests/BinarySearchTreeTests

@@ -1,6 +1,37 @@
 #include "../DataStructures/BinaryTrees/BinarySearchTree.h"
+#include "../DataStructures/LinkedLists/DoublyLinkedList.h"
 
-void PrintTree(BinarySearchTreeNode *current_ptr, char* positionString) {
+void PrintTreeBreadthFirst(BinarySearchTreeNode *current_ptr) {
+    if (current_ptr == NULL) {
+        return;
+    }
+
+    DoublyLinkedList* myList = new_LinkedList("BSTNode", sizeof(BinarySearchTreeNode*));
+
+    LinkedList_Add(myList, &current_ptr);
+    printf("%d ", current_ptr->data);
+    do 
+    {
+        current_ptr = (*(BinarySearchTreeNode**)LinkedList_GetFirst(myList));
+        
+        if (current_ptr->left != NULL) {
+            printf("%d ", current_ptr->left->data);
+            if (current_ptr->left->left != NULL || current_ptr->left->right != NULL )
+                LinkedList_Add(myList, &(current_ptr->left));
+        }
+        if (current_ptr->right != NULL) {
+            printf("%d ", current_ptr->right->data);
+            if (current_ptr->right->left != NULL || current_ptr->right->right != NULL )
+                LinkedList_Add(myList, &(current_ptr->right));
+        }
+
+        LinkedList_RemoveFirst(myList);
+    } while (myList->length > 0);
+
+    return;
+}
+
+void PrintTreeDepthFirst(BinarySearchTreeNode *current_ptr, char* positionString) {
     if (current_ptr == NULL) {
         return;
     }
@@ -10,11 +41,11 @@ void PrintTree(BinarySearchTreeNode *current_ptr, char* positionString) {
     char leftPosStr[500];
     strcpy(leftPosStr, positionString);
     strcat(leftPosStr, "Left");
-    PrintTree(current_ptr->left, leftPosStr);
+    PrintTreeDepthFirst(current_ptr->left, leftPosStr);
     char rightPosStr[500];
     strcpy(rightPosStr, positionString);
     strcat(rightPosStr, "Right");
-    PrintTree(current_ptr->right, rightPosStr);
+    PrintTreeDepthFirst(current_ptr->right, rightPosStr);
 
     return;
 }
@@ -35,5 +66,6 @@ int main (int) {
     BinarySearchTree_Insert(root, 3);
     BinarySearchTree_Insert(root, 5);
 
-    PrintTree(root, positionString);
+    PrintTreeDepthFirst(root, positionString);
+    PrintTreeBreadthFirst(root);
 }

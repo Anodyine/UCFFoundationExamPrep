@@ -25,6 +25,7 @@ void* LinkedList_GetFirst (DoublyLinkedList* list);
 void* LinkedList_GetLast (DoublyLinkedList* list);
 void* LinkedList_GetByIndex (DoublyLinkedList* list, int index);
 int LinkedList_RemoveByIndex (DoublyLinkedList* list, int index);
+int LinkedList_RemoveFirst (DoublyLinkedList* list);
 int LinkedList_Destroy (DoublyLinkedList* list);
 
 #endif
