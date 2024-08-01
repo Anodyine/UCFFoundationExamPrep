@@ -23,6 +23,7 @@ int main () {
     int itemValues[] = {60, 100, 120};
     int itemWeights[] = {10, 20, 30};
     int capacity = 50;
+    
     int numberOfItems = 3;
     printf("%d", getKnapSackMaxValue(capacity, itemWeights, itemValues, numberOfItems));
     return 0;
